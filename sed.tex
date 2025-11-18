@@ -1,0 +1,81 @@
+%!tex program = lualatex
+\documentclass{ctexart}
+\usepackage[outputdir=build]{minted2}
+\usepackage[margin=2cm]{geometry}
+\usepackage{bashful}
+\usepackage[most]{tcolorbox}
+\usepackage{silence}
+\title{sed命令}
+\author{dax}
+\date{2025年11月18日}
+
+\WarningFilter{latexfont}{Font shape}
+\WarningFilter{latexfont}{Some font}
+
+\tcbuselibrary{minted, skins, listings}
+\setmonofont{JetBrainsMonoNL Nerd Font Mono}
+
+\newtcblisting{commandshell}{
+	listing engine=minted,
+	minted style=solarized-light,
+	minted language=shell,
+	colback=red!15!black,
+	colframe=red!40!black,
+	colupper=white,
+	title=\textsf{zsh - sed},
+	listing only,
+}
+
+\begin{document}
+% \begin{noindent}
+\begin{commandshell}
+$> seq 3 | sed 's/2/hello/'
+1
+hello
+3
+\end{commandshell}
+% \end{noindent}
+% \begin{noindent}
+\begin{commandshell}
+$> cat list
+John Daggett, 341 King Road, Plymouth MA
+Alice Ford, 22 East Broadway, Richmond VA
+Orville Thomas, 11345 Oak Bridge Road, Tulsa OK
+Terry Kalkas, 402 Lans Road, Beaver Falls PA
+Eric Adams, 20 Post Road, Sudbury MA
+Hubert Sims, 328A Brook Road, Roanoke VA
+Amy Wilde, 334 Bayshore Pkwy, Mountain View CA
+Sal Carpenter, 73 6th Street, Boston MA
+\end{commandshell}
+% \end{noindent}
+% \begin{noindent}
+\begin{commandshell}
+$> awk -F, '{print $1}'
+John Daggett
+Alice Ford
+Orville Thomas
+Terry Kalkas
+Eric Adams
+Hubert Sims
+Amy Wilde
+Sal Carpenter
+\end{commandshell}
+% \end{noindent}
+% \begin{noindent}
+\begin{commandshell}
+$> awk -F, '{print $1}'
+
+total 32
+drwxr-xr-x@  3 dax  staff    96 11月 18 14:43 _minted-sed
+drwxr-xr-x   9 dax  staff   288 11月 18 17:26 .
+drwxr-xr-x   7 dax  staff   224 11月 18 13:12 ..
+drwxr-xr-x@ 12 dax  staff   384 11月 18 17:26 build
+-rw-r--r--   1 dax  staff  2556 11月 18 17:26 indent.log
+-rw-r--r--@  1 dax  staff     2 11月 18 15:07 sed.exitCode
+-rw-r--r--@  1 dax  staff    40 11月 18 15:07 sed.stderr
+-rw-r--r--@  1 dax  staff     0 11月 18 15:07 sed.stdout
+-rw-r--r--   1 dax  staff  1547 11月 18 17:26 sed.tex
+\end{commandshell}
+% \end{noindent}
+
+\end{document}
