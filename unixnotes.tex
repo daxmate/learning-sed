@@ -1,0 +1,104 @@
+%!tex program = lualatex
+\documentclass{ctexbook}
+\usepackage[outputdir=build]{minted2}
+\usepackage[margin=2cm]{geometry}
+\usepackage{bashful}
+\usepackage[most]{tcolorbox}
+\usepackage{silence}
+
+\WarningFilter{latexfont}{Font shape}
+\WarningFilter{latexfont}{Some font}
+\WarningFilter{latexfont}{Size substitutions}
+
+\tcbuselibrary{minted, skins, listings}
+
+
+% 颜色定义：经典终端绿色
+\definecolor{termgreen}{RGB}{0,255,0}
+\definecolor{termblack}{RGB}{0,0,0}
+\colorlet{bg}{black!90}
+\colorlet{fg}{termgreen}
+\definecolor{parchment}{RGB}{245, 238, 220}   % 浅黄/米白（羊皮纸）
+\definecolor{sepia}{RGB}{60, 40, 20}          % 深棕（墨水色）
+\definecolor{olive}{RGB}{45, 60, 40}          % 墨绿（可选标题色）
+\setmonofont{JetBrainsMonoNL Nerd Font Mono}
+\setCJKmainfont{PingFang SC}
+\setmainfont{PingFang SC}
+
+\ctexset{
+	chapter={
+	  name={第,章},
+	  number=\chinese{chapter},
+	  format=\centering\Huge\bfseries\color{sepia},
+	  % aftername=\vskip 1em,
+	  beforeskip={-10pt},
+	  afterskip={20pt\vspace{5pt}\hrule}
+	 },
+	section={
+	  format=\large\bfseries\color{sepia},
+	  aftername={\quad},
+	  beforeskip=1.2ex,
+	  afterskip=0.8ex
+	 }
+}
+\newtcblisting{commandshell}{
+	listing engine=minted,
+	minted style=gruvbox-light,
+	minted language=shell,
+	colback=green!5!white,
+	colframe=green!65!black,
+	colupper=green!50!black,
+	title=\textsf{zsh},
+	listing only,
+}
+
+
+
+\newmintinline[shminted]{sh}{}
+\newcommand{\shellinline}[1]{{\begin{tikzpicture}[baseline=(code.base)]
+				\node[inner sep=2pt, text height=8pt, text depth=2pt, rounded corners=1pt, %fill=green!5,
+					draw=sepia, line width=0.1pt](code){\shminted[escapeinside=||]{#1}};
+				\useasboundingbox ([xshift=-1pt]current bounding box.west) rectangle ([xshift=1pt]current bounding box.east);
+			\end{tikzpicture}}}
+
+
+\begin{document}
+\begin{titlepage}
+	% 设置背景为黑色，文字为绿色
+	\pagecolor{bg}
+	\color{fg}
+
+	\begin{center}
+		\vspace*{2cm}
+
+		% 标题：模拟终端输出
+		{\LARGE \texttt{\$ cat unix\_basics.md}}\\[1em]
+
+		{\Huge \textbf{UNIX 基础命令笔记}}\\[1em]
+
+		{\Large 学习常用命令 · 理解文件系统 · 掌握 Shell}\\[2em]
+
+		{\large \texttt{user@unix:~/notes\$ whoami}}\\
+		{\large dax}\\[1em]
+
+		{\large \texttt{user@unix:~/notes\$ date}}\\
+		{\large \today}\\[3em]
+
+		{\footnotesize \texttt{PATH=/bin:/usr/bin:/usr/local/bin}}\\
+		{\footnotesize \texttt{SHELL=/bin/zsh}}
+		\begin{verbatim}
+												 _   _ _____ _     _     ___    _   _ _   _ _____  __
+												| | | | ____| |   | |   / _ \  | | | | \ | |_ _\ \/ /
+												| |_| |  _| | |   | |  | | | | | | | |  \| || | \  / 
+												|  _  | |___| |___| |__| |_| | | |_| | |\  || | /  \ 
+												|_| |_|_____|_____|_____\___/   \___/|_| \_|___/_/\_\
+                                                     
+		\end{verbatim}
+	\end{center}
+\end{titlepage}
+
+
+\pagecolor{parchment}
+\tableofcontents
+\include{sed}
+\end{document}
