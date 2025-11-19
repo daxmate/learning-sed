@@ -22,13 +22,14 @@
 
 汤普森的工作和创新精神激励着一代又一代的程序员和计算机科学家。他的贡献不仅推动了计算机技术的发展，也改变了人们使用计算机的方式。而 \shellinline{ed} 编辑器作为他众多成就中的一部分，虽然在现代文本编辑器的浪潮中逐渐被边缘化，但它在计算机文本处理历史上的重要地位不可磨灭，它为后续编辑器的发展提供了宝贵的思路经验，\shellinline{sed} 编辑器就是其中的杰出代表。
 \section{李·爱德华·麦克马洪和sed}
-李·爱德华·麦克马洪（Lee Edward
-McMahon）是贝尔实验室的计算机科学家。他在1973年至1974年期间开发了\shellinline{sed}编辑器，旨在创建一个通用的、基于行的流编辑器，以弥补\shellinline{ed}编辑器在处理大型文件或批量文本操作时的不足。在开发\shellinline{sed}之前，麦克马洪已经参与了多个文本编辑工具的开发工作，包括\shellinline{ed}和更早的\shellinline{qed}，这些经验为他设计\shellinline{sed}提供了重要基础。
-\begin{wrapfigure}{r}{0.45\textwidth}
+\begin{wrapfigure}{r}{0.5\textwidth}
 	\centering
 	\includegraphics[width=0.28\textwidth]{images/mcmahon}
 	\caption{McMahon}
 \end{wrapfigure}
+李·爱德华·麦克马洪（Lee Edward
+McMahon）是贝尔实验室的计算机科学家。他在1973年至1974年期间开发了\shellinline{sed}编辑器，旨在创建一个通用的、基于行的流编辑器，以弥补\shellinline{ed}编辑器在处理大型文件或批量文本操作时的不足。在开发\shellinline{sed}之前，麦克马洪已经参与了多个文本编辑工具的开发工作，包括\shellinline{ed}和更早的\shellinline{qed}，这些经验为他设计\shellinline{sed}提供了重要基础。
+
 \shellinline{sed}（stream editor）是一个基于文本的流编辑器，主要用于解析和转换文本。它使用一种简单而紧凑的编程语言，能够对文本文件执行替换、删除、插入等操作。作为Unix系统中的标准工具，\shellinline{sed}以其简洁高效的语法而著称，支持正则表达式，能够灵活匹配文本模式。其流式处理方式逐行读取输入文本，应用命令后输出结果，这使得它能够高效处理大型文件。此外，\shellinline{sed}具有良好的可扩展性，可以与其他工具如AWK和Perl结合使用，以应对更复杂的文本处理任务。
 
 \shellinline{sed}的开发源于对\shellinline{ed}编辑器局限性的改进。\shellinline{ed}作为交互式工具，在批量处理时操作繁琐，而\shellinline{sed}通过流式处理和命令批量化，显著提升了文本处理效率。\shellinline{sed}广泛应用于文本替换、过滤、格式化及自动化等场景，例如替换特定字符串、删除符合模式的行或调整文本格式。尽管\shellinline{sed}功能强大，但对于高度复杂的任务，它可能显得不够灵活，此时可以使用AWK或Perl等工具，这些工具提供了更丰富的编程结构和数据处理能力。
