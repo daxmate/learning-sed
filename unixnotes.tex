@@ -41,15 +41,21 @@
 	  aftername={\quad},
 	  beforeskip=1.2ex,
 	  afterskip=0.8ex
-	 }
+	 },
+	subsection={
+			format=\bfseries\color{sepia},
+			aftername={\quad},
+			beforeskip=1.2ex,
+			afterskip=0.8ex
+		},
 }
 \newtcblisting{commandshell}{
 	listing engine=minted,
 	minted style=gruvbox-light,
 	minted language=shell,
-	colback=green!5!white,
-	colframe=green!65!black,
-	colupper=green!50!black,
+	colback=parchment,
+	colframe=sepia,
+	colupper=sepia,
 	title=\textsf{zsh},
 	listing only,
 }
