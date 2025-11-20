@@ -1,8 +1,7 @@
 \chapter{SED 编辑器}
-\section{肯·汤普森与 ed 编辑器}
+\section{ed：Unix世界中的文本编辑\enquote{活化石}}
 
 
-肯·汤普森（Kenneth Lane Thompson），1943 年 2 月 4 日出生于美国路易斯安那州新奥尔良，是计算机科学领域的先驱人物。他于 1965 年和 1966 年在加州大学伯克利分校分别获得了电气工程与计算机科学的学士和硕士学位。1966 年，汤普森加入贝尔实验室，开启了他的传奇职业生涯。
 
 \begin{wrapfigure}{l}{0.45\textwidth}
 	\centering
@@ -10,31 +9,152 @@
 	\caption{Thompson 2019}
 \end{wrapfigure}
 
-在贝尔实验室，汤普森与丹尼斯·里奇（Dennis Ritchie）等人合作，参与了 Multics 操作系统的开发。在这一过程中，他创造了 Bon 编程语言，并开发了一款名为 Space Travel 的视频游戏。后来，贝尔实验室退出了 Multics 项目，但汤普森对编程的热情并未减退。他利用一台旧的 PDP-7 机器，将 Space Travel 重新编写，而在这个过程中，他和同事们开发的一系列工具逐渐演变成了 Unix 操作系统。
+在计算机技术飞速发展的今天，众多功能强大、界面友好的文本编辑器层出不穷，但 ed 这个古老的文本编辑器却依然在 Unix 和类 Unix 系统中占有一席之地。它就像一位历经沧桑的老者，见证了操作系统从早期的简陋到如今的复杂多样，其独特的存在意义和价值令人深思。
 
-在 Unix 的开发过程中，汤普森意识到操作系统需要一种系统编程语言，于是他创造了 B 语言，这是里奇后来开发 C 语言的直接前身。而除了在编程语言和操作系统方面的贡献，汤普森在文本编辑器领域也有着重要的影响，他发明了 \shellinline{ed} 编辑器。
+\subsection{诞生背景与历史地位}
 
-\shellinline{ed} 是 Unix 系统上的标准文本编辑器，它的出现极大地推动了文本处理的发展。\shellinline{ed} 编辑器以其简洁和高效而著称，它允许用户通过简单的命令来对文本文件进行编辑操作，如插入、删除、替换等。\shellinline{ed} 编辑器的命令语法简洁明了，虽然它没有现代文本编辑器那样丰富的图形用户界面，但在当时，它为用户提供了强大的文本处理能力，成为 Unix 系统中不可或缺的工具之一。
+ed 的诞生可以追溯到 1969 年，由 Ken Thompson 在 AT\&T 贝尔实验室的 PDP-7 上开发，它是 Unix 操作系统最初的三个关键组成部分之一，与汇编器、shell 并列。Ken Thompson 在加州大学伯克利分校学习时接触过 qed 文本编辑器，对该编辑器十分熟悉，还将它重新实现到了 CTSS 和 Multics 系统上。qed 的许多特性对 ed 的设计产生了深远影响，尤其是正则表达式的引入，这在当时是一项极具前瞻性的创新，为文本处理开辟了新的可能性。
 
-\shellinline{ed} 编辑器的出现，为后续文本编辑器的发展奠定了基础，其中就包括 \shellinline{sed} 编辑器。\shellinline{sed}（stream editor）是基于 \shellinline{ed} 的思想和语法发展而来的流编辑器，它在 \shellinline{ed} 的基础上进行了扩展和优化，能够对文本流进行更灵活、更高效的处理。\shellinline{sed} 编辑器的出现，进一步丰富了 Unix 系统中的文本处理工具，也为后来的文本处理工具的发展提供了重要的借鉴。
+随着时间推，ed 的影响力不断扩散。Dennis M. Ritchie 对 ed
+进行了进一步完善，使其成为后来众多文本编辑器的灵感源泉。例如，ex 编辑器就是在 ed 的基础上发展起来的，而著名的 vi
+编辑器又是从 ex 演变而来。非交互式 Unix 命令 grep 的诞生也与 ed 密切相关，它源自 qed 和 ed 中常见的特殊用法，即命令
+\shellinline{g/re/p}，用于执行全局正则表达式搜索并打印包含匹配项的行。此外，Unix 流编辑器 sed 实现了 qed 中许多未被 ed 支持的脚本功能，这些都体现了 ed 对 Unix 文化中文本处理工具的深远影响。
 
-肯·汤普森的贡献不仅局限于 \shellinline{ed} 编辑器，他在计算机科学领域的诸多成就都对后世产生了深远的影响。他与里奇共同获得了 1983 年的图灵奖，以表彰他们在 Unix 操作系统开发方面的杰出贡献。此外，他还获得了众多其他荣誉和奖项，包括 IEEE Richard W. Hamming 奖章、美国国家技术奖章等，这些都充分证明了他在计算机科学领域的卓越地位。
+\subsection{核心功能与工作原理}
 
-汤普森的工作和创新精神激励着一代又一代的程序员和计算机科学家。他的贡献不仅推动了计算机技术的发展，也改变了人们使用计算机的方式。而 \shellinline{ed} 编辑器作为他众多成就中的一部分，虽然在现代文本编辑器的浪潮中逐渐被边缘化，但它在计算机文本处理历史上的重要地位不可磨灭，它为后续编辑器的发展提供了宝贵的思路经验，\shellinline{sed} 编辑器就是其中的杰出代表。
-\section{李·爱德华·麦克马洪和sed}
+ed 是一个行编辑器，这意味着它主要以行为单位对文本进行操作，而不是像现代的全屏编辑器那样可以直观地查看和编辑整个文本内容。它支持正则表达式，这使得用户能够以强大的模式匹配能力来搜索和替换文本中的特定内容，例如可以通过简单的命令快速找到文本中所有符合特定模式的行，并进行批量修改。
+
+ed 的自动化能力也十分出色，可以通过从标准输入接收命令来实现复杂的文本处理任务。用户可以编写一系列命令，然后将它们传递给 ed，让 ed 自动执行这些命令来完成文本编辑工作，这对于批量处理文本文件非常高效。
+
+然而，ed 也因其简洁到近乎苛刻的交互方式而闻名。它与像 Teletype Model 33 这样的电传打字机终端兼容，几乎不提供任何视觉反馈。当出现错误时，ed 只会显示一个简单的“？”作为提示，而且在用户尝试在未保存更改的情况下退出时，早期版本的 ed 甚至不会要求确认。这种简洁性在早期 Unix 系统中是合理的，因为当时的终端设备速度慢、内存有限，但随着技术的发展，这种交互方式逐渐显得有些过时。
+
+\subsection{实际应用与局限性}
+
+在实际应用中，ed 现在很少被用于交互式编辑。在 20 世纪 80 年代，sam、vi 和 Emacs 等全屏编辑器逐渐流行起来，它们提供了更直观的用户界面和更丰富的功能，使得用户能够更方便地查看和编辑文本。尽管如此，ed 依然在一些 shell 脚本中发挥着重要作用。由于它几乎存在于所有的 Unix 和 Linux 系统中，对于需要在多种 Unix 版本之间工作的用户来说，ed 是一个可靠的备用编辑器。此外，一些工具如 SQL*Plus 在 EDITOR 和 VISUAL 环境变量未定义时，会默认使用 ed 作为编辑器。
+
+ed 的局限性主要体现在其用户交互体验上。它的命令都是单个字母，对于初学者来说很难记住，而且在编辑过程中，用户需要手动输入命令来查看文本内容的变化，这与现代编辑器的即时反馈形成了鲜明对比。不过，GNU 版本的 ed 提供了一些增强反馈的选项，例如使用 ed -v -p: 可以提供简单的提示符和更有用的反馈信息，这在一定程度上改善了用户体验。
+
+\subsection{文化影响与未来展望}
+
+尽管 ed 的使用率不高，但它在计算机文化中却有着独特的地位。GNU 项目在其网站上围绕 ed 开展了许多有趣的笑话，这些笑话反映了 ed 在开发者社区中的特殊地位。同时，glibc 文档中也提到了一个名为 ED 的错误代码，其描述仅为一个问号，这无疑是对 ed 交互风格的一种幽默致敬。
+
+尽管现代文本编辑器不断涌现，但 ed 依然以其独特的简洁性和强大的文本处理能力在 Unix 和类 Unix 系统中占有一席之地。它不仅是 Unix 历史的见证者，也是现代文本编辑器发展的重要基石。在未来，虽然 ed 很可能不会成为主流的交互式文本编辑器，但它在 shell 脚本和特定场景下的应用价值依然不可忽视，它将继续作为 Unix 文化的重要组成部分，为开发者提供一种独特的文本处理方式。
+
+
+\section{sed：流编辑器的开山鼻祖}
 \begin{wrapfigure}{r}{0.5\textwidth}
 	\centering
 	\includegraphics[width=0.28\textwidth]{images/mcmahon}
 	\caption{McMahon}
 \end{wrapfigure}
-李·爱德华·麦克马洪（Lee Edward
-McMahon）是贝尔实验室的计算机科学家。他在1973年至1974年期间开发了\shellinline{sed}编辑器，旨在创建一个通用的、基于行的流编辑器，以弥补\shellinline{ed}编辑器在处理大型文件或批量文本操作时的不足。在开发\shellinline{sed}之前，麦克马洪已经参与了多个文本编辑工具的开发工作，包括\shellinline{ed}和更早的\shellinline{qed}，这些经验为他设计\shellinline{sed}提供了重要基础。
 
-\shellinline{sed}（stream editor）是一个基于文本的流编辑器，主要用于解析和转换文本。它使用一种简单而紧凑的编程语言，能够对文本文件执行替换、删除、插入等操作。作为Unix系统中的标准工具，\shellinline{sed}以其简洁高效的语法而著称，支持正则表达式，能够灵活匹配文本模式。其流式处理方式逐行读取输入文本，应用命令后输出结果，这使得它能够高效处理大型文件。此外，\shellinline{sed}具有良好的可扩展性，可以与其他工具如AWK和Perl结合使用，以应对更复杂的文本处理任务。
 
-\shellinline{sed}的开发源于对\shellinline{ed}编辑器局限性的改进。\shellinline{ed}作为交互式工具，在批量处理时操作繁琐，而\shellinline{sed}通过流式处理和命令批量化，显著提升了文本处理效率。\shellinline{sed}广泛应用于文本替换、过滤、格式化及自动化等场景，例如替换特定字符串、删除符合模式的行或调整文本格式。尽管\shellinline{sed}功能强大，但对于高度复杂的任务，它可能显得不够灵活，此时可以使用AWK或Perl等工具，这些工具提供了更丰富的编程结构和数据处理能力。
+在 Unix 系统的浩渺工具海洋中sed（stream editor）宛如一颗熠熠生辉的明珠，自 1974 年由 Bell Labs 的 Lee E. McMahon 倾心打造后，便凭借其精巧而强大的文本处理能力，成为无数程序员与系统管理员的得力助手，历经岁月洗礼仍屹立不倒，持续在各类操作系统上发光发热。
 
-麦克马洪的创新为文本处理工具的发展奠定了坚实基础，\shellinline{sed}不仅成为Unix系统中不可或缺的工具，还影响了后续工具如AWK和Perl的设计。他的工作延续了贝尔实验室在计算机科学领域的传统，为高效文本处理提供了持久价值。
+sed 是一款以行为单位进行文本处理的工具，它从输入流或文件中逐行读取文本，存入内部的模式空间（pattern space），随后依据用户提供的sed 脚本，对每一行文本执行相应的操作sed 脚本由约 25 条命令构成，涵盖了从简单替换到复杂文本结构转换的诸多功能。在默认情况下sed 会在执行完脚本指令后，输出模式空间中的内容，紧接着处理下一行文本，如此循环往复，直至处理完整个输入流。
 
-\section[ed的基本用法]{\shellinline{ed}的基本用法}
-下面我们来演示一下\shellinline{ed}的基本用法，\shellinline{ed}由于设计的比较早，随着计算机性能的提升早已淡出实际使用的场景。这里的演示不是为了在实际的场景中使用它，而是了解它的设计思路以及其产生的背景。
+sed 最为人熟知且频繁使用的功能当属替换命令（\shellinline{s///}）。
+\\例如，命令 \shellinline{sed 's/regexp/replacement/g' input > output} 能够将输入文件中符合正则表达式 regexp
+的文本替换为 replacement，并将结果输出到指定文件。这里的 \enquote{g} 标志意味着全局替换，即一行中所有匹配的内容都会被替换掉。正则表达式的运用，赋予了sed 强大的模式匹配能力，无论是简单的字符匹配，还是复杂的文本结构识别sed 都能轻松应对。
+
+除了替换功能sed 还能执行诸如删除（d）、追加（a）、插入（i）等多种操作。比如，命令\\ \shellinline{sed '/^ *$/d' input}
+可以删除输入文件中仅包含空格或为空的行，这在清理文本数据时极为实用sed 的命令语言虽简洁，却蕴含着强大的功能，甚至具备图灵完备性，能够实现一些复杂的文本处理逻辑，比如通过标签和分支指令实现流程控制，完成类似编程语言中的循环和条件判断操作。
+
+sed
+的使用场景极为广泛。在命令行中，可以作为管道的一部分，对其他命令的输出进行即时处理。例如，将某个命令的输出通过管道传递给
+sed，快速完成文本格式的转换或数据的初步清洗。此外sed还支持基于文件的脚本运行，用户可以将多个sed
+命令写入一个脚本文件，通过 \shellinline{sed -f script input}的方式执行，这种方式不仅便于维护复杂的文本处理逻辑，还能避免命令行中可能出现的转义和替换问题。
+
+GNU sed 的出现为sed 带来了更多新特性，其中最具影响力的是原地编辑（in-place editing）功能。通过 \shellinline{sed -i} 选项，用户可以直接修改文件内容，而无需额外的输出重定向操作，这在批量处理文本文件时极大地提高了效率。此外，还有诸如 Super sed 这样的扩展版本，它增加了与 Perl 兼容的正则表达式，进一步拓展了sed的应用范围。
+
+尽管sed 功能强大，但在面对一些复杂的文本处理任务时，如需对文本进行多行关联分析或执行复杂的文本结构转换，AWK 或 Perl 等更高级的文本处理工具或许是更好的选择。不过sed凭借其简单易用、轻量级的特点，在处理简单文本替换、格式调整等任务时，依然是首选工具，它的语法和设计理念也对后续诸多文本处理工具和编程语言产生了深远影响。
+
+\section{sed的工作流程}
+sed（stream editor，流编辑器）是一种面向行的文本处理工具，其核心设计理念是对输入流逐行处理、单次遍历、高效转换。它的工作流程遵循以下原理：
+
+1. 读取输入：sed 从标准输入或指定文件中按行读取文本。每一行去掉行末的\shellinline{\n}被读入一个称为模式空间（pattern space）的内部缓冲区。
+
+2. 执行脚本命令：对于模式空间中的当前行，sed 按顺序执行用户提供的编辑命令（如替换 \shellinline{s///}、删除
+\shellinline{d}、打印 \shellinline{p} 等）。这些命令可以基于行号、正则表达式或地址范围进行条件匹配。
+
+3. 自动输出（默认）：在处理完当前行的所有命令后，若未使用 \shellinline{-n} 选项，sed
+会自动将模式空间的内容加上\shellinline{\n}输出到标准输出。
+
+4. 清空并进入下一行：输出完成后，模式空间被清空（除非使用 \shellinline{D} 或 \shellinline{N} 等特殊命令保留内容），然后读取下一行，重复上述过程，直到输入结束。
+
+此外，sed 还维护一个称为暂存空间（hold space的辅助缓冲区，可通过
+\shellinline{h}、\shellinline{H}、\shellinline{g}、\shellinline{G}、\shellinline{x} 等命令在模式空间与暂存空间之间传递数据，实现跨行处理（如合并多行、反向输出等复杂操作）。
+
+由于 sed 只对输入进行一次顺序扫描，不回溯、不加载全文到内存，因此特别适合在管道中高效处理大型文本流，是 Unix/Linux 文本自动化处理的重要工具之一。
+
+
+\section{sed的选项及命令概览}
+表\ref{tab:sed-options}列出了sed的全部选项，其中常用的有\shellinline{-n}、\shellinline{-f}、\shellinline{-i}、\shellinline{-e}、\shellinline{-r}。
+\begin{table}[htbp]
+	\centering
+	\footnotesize
+	\begin{tabular}{l l}
+		\toprule
+		\textbf{选项}                                        & \textbf{说明}                               \\\midrule
+		\texttt{-n}, \texttt{--quiet}, \texttt{--silent}     & 禁止自动打印模式空间内容。                  \\
+		\texttt{-e script}, \texttt{--expression=script}     & 将指定脚本添加到要执行的命令列表中。        \\
+		\texttt{-f script-file}, \texttt{--file=script-file} & 从文件中读取 sed 脚本并执行。               \\
+		\texttt{-i[SUFFIX]}, \texttt{--in-place[=SUFFIX]}    & 直接修改文件；若提供 SUFFIX，则备份原文件。 \\
+		\texttt{-l N}, \texttt{--line-length=N}              & 指定 \texttt{l} 命令输出时的换行宽度。      \\
+		\texttt{--posix}                                     & 禁用所有 GNU 扩展，仅使用 POSIX 标准功能。  \\
+		\texttt{-E}, \texttt{-r}, \texttt{--regexp-extended} & 使用扩展正则表式（ERE）。                   \\
+		\texttt{-s}, \texttt{--separate}                     & 将多个输入文件视为独立流，而非一个连续流。  \\
+		\texttt{--sandbox}                                   & 启用沙箱模式，禁用 \texttt{e/r/w} 等命令。  \\
+		\texttt{-u}, \texttt{--unbuffered}                   & 最小化读取输入，并更频繁地刷新输出缓冲区。  \\
+		\texttt{-z}, \texttt{--null-data}                    & 使用 NUL 字符（而非换行符）作为行分隔符。   \\
+		\texttt{--follow-symlinks}                           & 在就地编辑（\texttt{-i}）时跟随符号链接。   \\
+		\texttt{--version}                                   & 输出版本信息并退出。                        \\
+		\texttt{--help}                                      & 显示帮助信息并退出。                        \\
+		\bottomrule
+	\end{tabular}
+	\caption{sed 命令行选项}
+	\label{tab:sed-options}
+\end{table}
+
+表\ref{tab:sed-commands}列出了sed的全部脚本命令，其中常用的有\shellinline{s}、\shellinline{p}、\shellinline{d}、\shellinline{a}、\shellinline{i}、\shellinline{c}，而其他一些命令涉及到多行、暂存空间处理属于高级命令。
+\begin{table}[htbp]
+	\centering
+	\footnotesize
+	\begin{tabular}{ll}\toprule
+		\textbf{命令}                  & \textbf{说明}                                                                                     \\\midrule
+		\texttt{:label}                & 定义一个标签，供 \texttt{b} 或 \texttt{t} 命令跳转。                                              \\
+		\texttt{\#comment}             & 注释，直到行尾（或 \texttt{-e} 脚本片段结束）。                                                   \\
+		\texttt{\{} / \texttt{\}}      & 开始 / 结束命令块。                                                                               \\
+		\texttt{=}                     & 打印当前行号。                                                                                    \\
+		\texttt{a\textbackslash text}  & 在当前行后追加文本（多行需用反斜杠转义换行）。                                                    \\
+		\texttt{i\textbackslash text}  & 在当前行前插入文本（多行需用反斜杠转义换行）。                                                    \\
+		\texttt{q [exit-code]}         & 立即退出 sed 脚本（GNU 扩展支持退出码）。                                                         \\
+		\texttt{Q [exit-code]}         & 立即退出且不打印当前模式空间（GNU 扩展）。                                                        \\
+		\texttt{r filename}            & 从文件末尾读取内容并追加到输出。                                                                  \\
+		\texttt{R filename}            & 每次调用读取文件的一行并追（GNU 扩展）。                                                          \\
+		\texttt{b [label]}             & 无条件跳转到指定标签（省略则跳至脚本末尾）。                                                      \\
+		\texttt{c\textbackslash text}  & 用指定文本替换匹配的行（多行需转义）。                                                            \\
+		\texttt{d}                     & 删除模式空间，开始下一轮循环。                                                                    \\
+		\texttt{D}                     & 删除模式空间中第一个换行符前的内容，不读新行继续处理。                                            \\
+		\texttt{h}                     & 将模式空间复制到暂存空间（hold space）。                                                          \\
+		\texttt{H}                     & 将模式空间追加到暂存空间。                                                                        \\
+		\texttt{g}                     & 将暂存空间复制到模式空间。                                                                        \\
+		\texttt{G}                     & 将暂存空间追加到模式空间。                                                                        \\
+		\texttt{l}                     & 以“视觉明确”方式列出当前行（含不可见字符）。                                                      \\
+		\texttt{l width}               & 同上，但指定每行最大宽度（GNU 扩展）。                                                            \\
+		\texttt{n}                     & 读取下一行到模式空间（可能触发自动打印）。                                                        \\
+		\texttt{N}                     & 将下一行追加到模式空间（保留换行符）。                                                            \\
+		\texttt{p}                     & 打印整个模式空间。                                                                                \\
+		\texttt{P}                     & 仅打印模式空间中第一个换行符前的内容。                                                            \\
+		\texttt{s/regexp/replacement/} & 替换匹配正则表达式的部分；可用 \texttt{\&} 和 \texttt{\textbackslash1}–\texttt{\textbackslash9}。 \\
+		\texttt{t [label]}             & 若上次 \texttt{s} 成功，则跳转（GNU 扩展支持标签）。                                              \\
+		\texttt{T [label]}             & 若上次 \texttt{s} 未成功，则跳转（GNU 扩展）。                                                    \\
+		\texttt{w filename}            & 将当前模式空间写入文件。                                                                          \\
+		\texttt{W filename}            & 将模式空间第一行写入文件（GNU 扩展）。                                                            \\
+		\texttt{x}                     & 交换模式空间与暂存空间的内容。                                                                    \\
+		\texttt{y/source/dest/}        & 字符逐位映射转换（类似 \texttt{tr}）。
+		\\\bottomrule
+	\end{tabular}
+	\caption{sed 脚本命令}
+	\label{tab:sed-commands}
+\end{table}
