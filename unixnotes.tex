@@ -53,15 +53,16 @@
 		},
 	tocdepth=1,
 }
-\newtcblisting{shellcmd}{
+\newtcblisting[auto counter, number within=section]{shellcmd}[1][]{
 	listing engine=minted,
 	minted style=gruvbox-light,
 	minted language=shell,
 	colback=parchment,
 	colframe=sepia,
 	colupper=sepia,
-	title=\textsf{zsh},
+	title=\textsf{\thetcbcounter},
 	listing only,
+	#1
 }
 
 
