@@ -1,0 +1,8 @@
+apple banana cherry
+dog elephant frog
+hello world hello
+123 456 789
+The quick brown fox jumps over the lazy dog.
+HELLO WORLD!
+test@example.com
+line with   extra   spaces
