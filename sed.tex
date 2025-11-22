@@ -1,8 +1,6 @@
 \chapter{SED 编辑器}
 \section{ed：Unix世界中的文本编辑\enquote{活化石}}
 
-
-
 \begin{wrapfigure}{l}{0.45\textwidth}
 	\centering
 	\includegraphics[width=0.28\textwidth]{images/thompson}
@@ -40,14 +38,12 @@ ed 的局限性主要体现在其用户交互体验上。它的命令都是单�
 
 尽管现代文本编辑器不断涌现，但 ed 依然以其独特的简洁性和强大的文本处理能力在 Unix 和类 Unix 系统中占有一席之地。它不仅是 Unix 历史的见证者，也是现代文本编辑器发展的重要基石。在未来，虽然 ed 很可能不会成为主流的交互式文本编辑器，但它在 shell 脚本和特定场景下的应用价值依然不可忽视，它将继续作为 Unix 文化的重要组成部分，为开发者提供一种独特的文本处理方式。
 
-
 \section{sed：流编辑器的开山鼻祖}
 \begin{wrapfigure}{r}{0.5\textwidth}
 	\centering
 	\includegraphics[width=0.28\textwidth]{images/mcmahon}
 	\caption{McMahon}
 \end{wrapfigure}
-
 
 在 Unix 系统的浩渺工具海洋中sed（stream editor）宛如一颗熠熠生辉的明珠，自 1974 年由 Bell Labs 的 Lee E. McMahon 倾心打造后，便凭借其精巧而强大的文本处理能力，成为无数程序员与系统管理员的得力助手，历经岁月洗礼仍屹立不倒，持续在各类操作系统上发光发热。
 
@@ -86,7 +82,6 @@ sed（stream editor，流编辑器）是一种面向行的文本处理工具，�
 \shellinline{h}、\shellinline{H}、\shellinline{g}、\shellinline{G}、\shellinline{x} 等命令在模式空间与暂存空间之间传递数据，实现跨行处理（如合并多行、反向输出等复杂操作）。
 
 由于 sed 只对输入进行一次顺序扫描，不回溯、不加载全文到内存，因此特别适合在管道中高效处理大型文本流，是 Unix/Linux 文本自动化处理的重要工具之一。
-
 
 \section{sed的选项及命令概览}
 表\ref{tab:sed-options}列出了sed的全部选项，其中常用的有\shellinline{-n}、\shellinline{-f}、\shellinline{-i}、\shellinline{-e}、\shellinline{-r}。
@@ -159,7 +154,7 @@ sed（stream editor，流编辑器）是一种面向行的文本处理工具，�
 	\label{tab:sed-commands}
 \end{table}
 
-\section{常用用法}
+\section{常用用法}\label{sec:normal}
 我这里使用的是GNU版本的sed，macOS上自带的是BSD版本的，这两个版本有一些差异，GNU版本的功能更全，出错信息也更有帮助。特别是原地修改（\shellinline{-i}选项用法不一致，以及BSD版sed不支持扩展正则语法。
 \begin{shellcmd}
 $> sed --version
@@ -279,7 +274,6 @@ HELLO there HELLO
 $> sed -n -f script.sed sample.txt > temp.txt
 \end{shellcmd}
 
-
 用\shellinline{-i}可以实现原地修改，但是这个比较危险，使用之前要确认修改的内容是你想要的。
 \begin{shellcmd}
 $> sed -n -i -f script.sed sample.txt
@@ -306,3 +300,37 @@ test@example.com
 line with   extra   spaces
 \end{shellcmd}
 \shellinline{1d}是作用是删除第一行。
+
+\section{其他几个标签}
+在\nameref{sec:normal}中介绍了\shellinline{g}、\shellinline{p}、\shellinline{n}(数字)标签，这里面我们来介绍
+\subsection{i/I标签-忽略大小写（case insensitive）}
+i标签的作用是搜索的时候不区分大小写。
+\begin{shellcmd}
+$> sed -n 's/hello/xxxxx/igp' sample.txt
+xxxxx world xxxxx
+xxxxx WORLD!
+\end{shellcmd}
+
+\subsection{w标签-写入文件}
+w标签使用时要注意，w之后的内容sed会全部认为是文件的名字，所以如果w标签之后还有其他操作，就需要用\shellinline{-e}或者将命令分行。
+\begin{shellcmd}[label={sub:labelw}]
+$> sed -n '/hello/Iw greetings.txt' sample.txt
+\end{shellcmd}
+另外，\shellinline{w}需要写在最后。示例\ref{sub:labelw}中不能使用\shellinline{i}来不区分大小写，因为在这里\shellinline{i}是插入命令。
+
+\subsection{e标签-执行shell命令}
+\begin{shellcmd}
+$> echo "Today is:\ndate" | sed '/date/e'
+Today is:
+2025年11月22日 星期六 11时02分30秒 CST
+\end{shellcmd}
+结合\shellinline{expr}命令，还可以实现数学运算。
+\begin{shellcmd}[label={sub:labele}]
+$> echo 3 | sed 's/./expr & "*" 4/e'
+12
+\end{shellcmd}
+注意\shellinline{*}号在shell中是通配符，所以需要用引号括起来表示是字符。示例\ref{sub:labele}中\shellinline{&}表示匹配到的内容。\shellinline{.}表示匹配任何内容，这个在正则表达式部分介绍。
+
+\subsection*{其他}
+另外还有一个\shellinline{m}标签，这个在介绍多行命令的时候再说。
+
