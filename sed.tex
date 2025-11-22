@@ -160,6 +160,24 @@ sed（stream editor，流编辑器）是一种面向行的文本处理工具，�
 \end{table}
 
 \section{常用用法}
+我这里使用的是GNU版本的sed，macOS上自带的是BSD版本的，这两个版本有一些差异，GNU版本的功能更全，出错信息也更有帮助。特别是原地修改（\shellinline{-i}选项用法不一致，以及BSD版sed不支持扩展正则语法。
+\begin{shellcmd}
+$> sed --version
+sed (GNU sed) 4.9
+Copyright (C) 2022 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Jay Fenlason, Tom Lord, Ken Pizzini,
+Paolo Bonzini, Jim Meyering, and Assaf Gordon.
+
+This sed program was built without SELinux support.
+
+GNU sed home page: <https://www.gnu.org/software/sed/>.
+General help using GNU software: <https://www.gnu.org/gethelp/>.
+E-mail bug reports to: <bug-sed@gnu.org>.
+\end{shellcmd}
 替换命令\shellinline{s}应该是sed最为人所知也最常用的功能，而其经典的语法\shellinline{s/old/new/}也深刻的影响后来的Vim等软件。下面我们就来演示一下基本的用法。
 \begin{shellcmd}[label={sub:simple}]
 $> echo "hello world" | sed 's/world/tomorrow/'
