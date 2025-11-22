@@ -289,7 +289,7 @@ $> sed -n --in-place=bak -f script.sed sample.txt
 注意一般长的选项前面加\shellinline{--}，而短的则加\shellinline{-}。
 
 另外一个常用的命令是删除\shellinline{d}。
-\begin{shellcmd}
+\begin{shellcmd}[label={sed:commandd}]
 $> sed '1d' sample.txt
 dog elephant frog
 hello world hello
@@ -334,3 +334,71 @@ $> echo 3 | sed 's/./expr & "*" 4/e'
 \subsection*{其他}
 另外还有一个\shellinline{m}标签，这个在介绍多行命令的时候再说。
 
+\section{行地址}
+sed的核心能力之一是通过\enquote{地址}（address）指定对这些行执行操作。其中，行号地址是最基础、最常用的地址形式。掌握行号地址的用法，是高效使用 sed 的关键。
+\subsection{单一行号}
+在示例\ref{sed:commandd}中我们已经见识过单个行号的用法。
+\begin{shellcmd}
+$> sed -n '3p' sample.txt #打印第3行
+
+hello world hello
+\end{shellcmd}
+\subsection{地址段}
+\begin{shellcmd}
+$> seq 5 | sed '2,4d' #删除2到4行
+
+1
+5
+\end{shellcmd}
+\subsection{\$行号}
+\textdollar 表示最后一行。
+\begin{shellcmd}
+$> seq 5 | sed '3,$d' #删除3到最后一行
+
+1
+2
+\end{shellcmd}
+
+\subsection{搜索结果}
+\begin{shellcmd}
+$> seq 5 | sed '/3/d' #搜索包含3的行并删除
+
+1
+2
+4
+5
+\end{shellcmd}
+
+\subsection{搜索结果地址范围}
+\begin{shellcmd}
+$> seq 5 | sed '/3/,/5/d' #搜索包含3的行与包含5的行及中间的行全部删除
+
+1
+2
+\end{shellcmd}
+如果\shellinline{sed '/hello/, /end/d'
+	sample.txt}中的end找不到，则会在找到hello后删除一直到最后一行结束，这个可能并不是我们想要的结果。只是受sed的设计原理所限，这是无法避免的。
+\begin{shellcmd}
+$> sed '/hello/,/end/d' sample.txt
+apple banana cherry
+dog elephant frog
+\end{shellcmd}
+\subsection{行号与搜索结果混合}
+\begin{shellcmd}
+$> sed '1,/hello/d' sample.txt
+123 456 789
+The quick brown fox jumps over the lazy dog.
+HELLO WORLD!
+test@example.com
+line with   extra   spaces
+\end{shellcmd}
+
+\subsection{地址加法}
+\begin{shellcmd}
+$> sed '/dog/,+2d' sample.txt #找到包含dog的行，删除其与下面的两行
+
+apple banana cherry
+line with   extra   spaces
+\end{shellcmd}
+
+需要说明的是，sed是依次读取每一行到模式空间中，所以不可能实现地址的减法。如果地址范围超出只会到最后一行就自动结束。
