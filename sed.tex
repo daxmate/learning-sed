@@ -402,3 +402,113 @@ line with   extra   spaces
 \end{shellcmd}
 
 需要说明的是，sed是依次读取每一行到模式空间中，所以不可能实现地址的减法。如果地址范围超出只会到最后一行就自动结束。
+
+\section{正则表达式}
+目前为止我们已经可以使用sed进行查找、替换、删除等常规操作，但这些功能相对有限。sed只有与正则表达式结合后才能发挥出真正的威力。本节之前的查找都是基于字面匹配，但在实际应用中，我们经常需要匹配更复杂的模式。
+
+\subsection{正则表达式基础概念}
+正则表达式是一种用于描述文本模式的特殊语法，它允许我们定义复杂的搜索模式而不仅仅是固定字符串。在POSIX规范中，正则表达式分为两种类型：BRE（基本正则表达式）和ERE（扩展正则表达式）。
+
+\subsubsection{BRE基本元字符}
+BRE是sed的默认正则表达式引擎，支持以下基本元字符：
+\begin{itemize}
+	\item \texttt{.} - 匹配任意单个字符（换行符除外）
+	\item \texttt{*} - 匹配前一个字符零次或多次
+	\item \texttt{\^} - 匹配行首
+	\item \texttt{\$} - 匹配行尾
+	\item \texttt{[]} - 字符类，匹配括号内的任意一个字符
+	\item \texttt{\textbackslash(} 和 \texttt{\textbackslash)} - 定义子表达式（分组）
+	\item \texttt{\textbackslash n} - 反向引用，匹配第n个子表达式
+\end{itemize}
+
+\subsubsection{ERE扩展元字符}
+使用\texttt{-E}或\texttt{-r}选项可以启用ERE，它增加了更多元字符：
+\begin{itemize}
+	\item \texttt{+} - 匹配前一个字符一次或多次
+	\item \texttt{?} - 匹配前一个字符零次或一次
+	\item \texttt{|} - 或操作，匹配多个模式之一
+	\item \texttt{\{}m,n\texttt{\}} - 量词，匹配前一个字符m到n次
+\end{itemize}
+
+\subsection{基本正则表达式示例}
+下面通过一些示例来演示BRE的基本用法：
+
+\begin{shellcmd}[label={regex:dot}]
+$> echo -e "cat\nbat\nrat\nhat" | sed -n '/.at/p'
+cat
+bat
+rat
+hat
+\end{shellcmd}
+示例\ref{regex:dot}中，\texttt{.}匹配任意字符，因此匹配所有以"at"结尾的三字母单词。
+
+\begin{shellcmd}[label={regex:star}]
+$> echo -e "ct\ncat\ncaat\ncaaat" | sed -n '/ca*t/p'
+ct
+cat
+caat
+caaat
+\end{shellcmd}
+示例\ref{regex:star}演示了\texttt{*}的用法，匹配零个或多个"a"字符。
+
+\begin{shellcmd}[label={regex:caret}]
+$> echo -e "hello world\nworld hello" | sed -n '/^hello/p'
+hello world
+\end{shellcmd}
+示例\ref{regex:caret}使用\texttt{\^}匹配以"hello"开头的行。
+
+\begin{shellcmd}[label={regex:dollar}]
+$> echo -e "hello world\nworld hello" | sed -n '/hello\$/p'
+world hello
+\end{shellcmd}
+示例\ref{regex:dollar}使用\texttt{\$}匹配以"hello"结尾的行。
+
+\subsection{字符类和分组}
+字符类和分组是正则表达式中更强大的功能：
+
+\begin{shellcmd}[label={regex:charclass}]
+$> echo -e "cat\nbat\nrat\nhat" | sed -n '/[cr]at/p'
+cat
+rat
+\end{shellcmd}
+示例\ref{regex:charclass}使用字符类\texttt{[cr]}匹配以"c"或"r"开头，以"at"结尾的单词。
+
+\begin{shellcmd}[label={regex:group}]
+$> echo "hello hello world" | sed 's/\(hello\) \1/HELLO HELLO/'
+HELLO HELLO world
+\end{shellcmd}
+示例\ref{regex:group}演示了分组和反向引用的用法，\texttt{\textbackslash 1}引用第一个分组的内容。
+
+\subsection{扩展正则表达式示例}
+使用ERE可以编写更简洁的正则表达式：
+
+\begin{shellcmd}[label={regex:ere-plus}]
+$> echo -e "ct\ncat\ncaat\ncaaat" | sed -E -n '/ca+t/p'
+cat
+caat
+caaat
+\end{shellcmd}
+示例\ref{regex:ere-plus}使用\texttt{+}匹配一个或多个"a"字符。
+
+\begin{shellcmd}[label={regex:ere-or}]
+$> echo -e "cat\ndog\nbird" | sed -E -n '/cat|dog/p'
+cat
+dog
+\end{shellcmd}
+示例\ref{regex:ere-or}使用\texttt{|}匹配"cat"或"dog"。
+
+\subsection{实际应用场景}
+正则表达式在实际文本处理中非常有用：
+
+\begin{shellcmd}[label={regex:email}]
+$> echo "Contact: test@example.com, admin@site.org" | sed -E 's/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/[EMAIL]/g'
+Contact: [EMAIL], [EMAIL]
+\end{shellcmd}
+示例\ref{regex:email}使用正则表达式匹配和替换电子邮件地址。
+
+\begin{shellcmd}[label={regex:phone}]
+$> echo "Phone: 123-456-7890, 555-1234" | sed -E 's/[0-9]{3}-[0-9]{3}-[0-9]{4}/[PHONE]/g'
+Phone: [PHONE], 555-1234
+\end{shellcmd}
+示例\ref{regex:phone}匹配标准格式的电话号码。
+
