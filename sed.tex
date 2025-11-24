@@ -459,6 +459,7 @@ BRE 的一个关键特点是：某些在 ERE 或现代正则中直接可用的�
 	\caption{BRE转义元字符}
 	\label{tab:label}
 \end{table}
+\noindent
 \twemoji{warning}\shellinline{\+}、\shellinline{\?} 并不是 POSIX BRE 的标准特性，但在 GNU 版本的 sed 和 grep 中被扩展支持。
 \textbf{示例（GNU sed）：}
 \begin{shellcmd}
@@ -479,17 +480,20 @@ hexxo world
 		特性   & BRE                                                  & ERE                                      \\\midrule
 		分组   & \shellinline{\(...\)}                                & \shellinline{(...)}                      \\
 		量词   & \shellinline{\{n\}}                                  & \shellinline{{n}}                        \\
-		或操作 & 不支持                                               & \shellinline{\ |}                        \\
-		+ 和 ? & 需转义为 \shellinline{\+} \shellinline{\?（非标准）} & 直接使用 \shellinline{+} \shellinline{?} \\
+		或操作 & 不支持                                               & \shellinline{|}                          \\
+		+ 和 ? & 需转义为 \shellinline{\+} \shellinline{\?（非标准）} & 直接使用 \shellinline{+} \shellinline{?}
+		\\\bottomrule
 	\end{tabular}
-	\caption{caption}
+	\caption{BRE与ERE的主要区别}
 \end{table}
 
-% 在 sed 中，若想使用 ERE，可加上 -E（或 -r，取决于系统）选项：
-% bash
-% sed -E 's/(foo)+/bar/g' # 使用 ERE
+在 sed 中，若想使用 ERE，可加上 \shellinline{-E}（或 -r，取决于系统）选项：
+\begin{shellcmd}
+$> sed -E 's/(foo)+/bar/g' # 使用 ERE
 
-% 否则，默认使用 BRE。
+\end{shellcmd}
+
+否则，默认使用 BRE。
 % 5. 实用技巧：在 sed 中使用 BRE
 % 替换每行开头的空白：
 % bash

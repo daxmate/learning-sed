@@ -68,7 +68,7 @@
 \newmintinline[shminted]{sh}{}
 \newcommand{\shellinline}[1]{{\begin{tikzpicture}[baseline=(code.base)]
 				\node[inner sep=2pt, text height=8pt, text depth=2pt, rounded corners=1pt, %fill=green!5,
-					draw=sepia, line width=0.1pt](code){\shminted[escapeinside=||]{#1}};
+					draw=sepia, line width=0.1pt](code){\shminted{#1}};
 				\useasboundingbox ([xshift=-1pt]current bounding box.west) rectangle ([xshift=1pt]current bounding box.east);
 			\end{tikzpicture}}}
 
