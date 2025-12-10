@@ -156,7 +156,7 @@ sed（stream editor，流编辑器）是一种面向行的文本处理工具，�
 
 \section{常用用法}\label{sec:normal}
 我这里使用的是GNU版本的sed，macOS上自带的是BSD版本的，这两个版本有一些差异，GNU版本的功能更全，出错信息也更有帮助。特别是原地修改（\shellinline{-i}选项用法不一致，以及BSD版sed不支持扩展正则语法。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed --version
 sed (GNU sed) 4.9
 Copyright (C) 2022 Free Software Foundation, Inc.
@@ -172,52 +172,52 @@ This sed program was built without SELinux support.
 GNU sed home page: <https://www.gnu.org/software/sed/>.
 General help using GNU software: <https://www.gnu.org/gethelp/>.
 E-mail bug reports to: <bug-sed@gnu.org>.
-\end{shellcmd}
+\end{shellcode}
 替换命令\shellinline{s}应该是sed最为人所知也最常用的功能，而其经典的语法\shellinline{s/old/new/}也深刻的影响后来的Vim等软件。下面我们就来演示一下基本的用法。
-\begin{shellcmd}[label={sub:simple}]
+\begin{shellcode}[label={sub:simple}]
 $> echo "hello world" | sed 's/world/tomorrow/'
 hello tomorrow
-\end{shellcmd}
+\end{shellcode}
 示例\ref{sub:simple}会扫描每一行，并进行替换。
 
-\begin{shellcmd}[label={sub:lineno}]
+\begin{shellcode}[label={sub:lineno}]
 $> echo "hello\nworld" | sed '2s/world/there/'
 hello
 there
-\end{shellcmd}
+\end{shellcode}
 示例\ref{sub:lineno}中首先会确认行号是不是2，确认后才会进行替换。
 
-\begin{shellcmd}[label={sub:delimiter1}]
+\begin{shellcode}[label={sub:delimiter1}]
 $> echo $HOME | sed 's/\//\\/'
 \Users/dax
-\end{shellcmd}
+\end{shellcode}
 示例\ref{sub:delimiter1}中，因为\shellinline{/}是替换命令的界定符，所以要替换其本身的时候需要进行转义。字符的转义都要用\shellinline{\ }。
 
-\begin{shellcmd}[label={sub:delimiter2}]
+\begin{shellcode}[label={sub:delimiter2}]
 $> echo $HOME | sed 's:/:\\:'
 \Users/dax
-\end{shellcmd}
+\end{shellcode}
 示例\ref{sub:delimiter1}中的写法比较麻烦，可读性差，所以遇到这种情况的时候，一般会改用其他界定符。
 
-\begin{shellcmd}[label={sub:labelg}]
+\begin{shellcode}[label={sub:labelg}]
 $> echo $HOME | sed 's:/:\\:g'
 \Users\dax
-\end{shellcmd}
+\end{shellcode}
 示例\ref{sub:delimiter1}和\ref{sub:delimiter2}中只替换了第一个匹配，如果需要替换全部，则需要用到\shellinline{g}标签。
 
-\begin{shellcmd}[label={sub:labeln}]
+\begin{shellcode}[label={sub:labeln}]
 $> echo $HOME | sed 's:/:\\:2'
 /Users\dax
-\end{shellcmd}
+\end{shellcode}
 也可以像示例\ref{sub:labeln}中一样指定替换第\shellinline{n}个匹配。
-\begin{shellcmd}[label={sub:labelng}]
+\begin{shellcode}[label={sub:labelng}]
 $> echo "hello world" | sed 's/l/x/2g'
 helxo worxd
-\end{shellcmd}
+\end{shellcode}
 将\shellinline{g}标签和\shellinline{n}标签结合，实现示例\ref{sub:labelng}中从\shellinline{n}到最后一个的替换。
 
 除了从\shellinline{stdin}输入，也可以直接从文件输入内容。
-\begin{shellcmd}
+\begin{shellcode}
 $> cat sample.txt
 apple banana cherry
 dog elephant frog
@@ -227,8 +227,8 @@ The quick brown fox jumps over the lazy dog.
 HELLO WORLD!
 test@example.com
 line with   extra   spaces
-\end{shellcmd}
-\begin{shellcmd}
+\end{shellcode}
+\begin{shellcode}
 $> sed 's/hello/HELLO/g' sample.txt
 apple banana cherry
 dog elephant frog
@@ -238,58 +238,58 @@ The quick brown fox jumps over the lazy dog.
 HELLO WORLD!
 test@example.com
 line with   extra   spaces
-\end{shellcmd}
+\end{shellcode}
 
 sed默认会打印所有的行，\shellinline{-n}选项可以关闭，然后用\shellinline{p}命令来打印匹配的行。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed -n 's/hello/HELLO/gp' sample.txt
 HELLO world HELLO
-\end{shellcmd}
+\end{shellcode}
 
 如果需要用到多个命令，可以用\shellinline{-e}选项。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed -n -e 's/hello/HELLO/g' -e 's/world/there/gp' sample.txt
 HELLO there HELLO
-\end{shellcmd}
+\end{shellcode}
 
 多个命令也可以用\shellinline{;}来分隔。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed -n 's/hello/HELLO/g;s/world/there/gp' sample.txt
 HELLO there HELLO
-\end{shellcmd}
+\end{shellcode}
 
 对于比较复杂的多个命令，我们可以将指令写在一个文件里面，然后用\shellinline{-f}选项来加载。
-\begin{shellcmd}
+\begin{shellcode}
 $> cat script.sed
 s/hello/HELLO/g
 s/world/there/gp
-\end{shellcmd}
-\begin{shellcmd}
+\end{shellcode}
+\begin{shellcode}
 $> sed -n -f script.sed sample.txt
 HELLO there HELLO
-\end{shellcmd}
+\end{shellcode}
 
 修改的结果我们可以用从\shellinline{stdout}重新定向（redirect）到文件。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed -n -f script.sed sample.txt > temp.txt
-\end{shellcmd}
+\end{shellcode}
 
 用\shellinline{-i}可以实现原地修改，但是这个比较危险，使用之前要确认修改的内容是你想要的。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed -n -i -f script.sed sample.txt
-\end{shellcmd}
+\end{shellcode}
 
 最好是用个备份，用\shellinline{-isuffix}或者\shellinline{--in-place=suffix}，我觉得后者更加易读些。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed -n -ibak -f script.sed sample.txt
-\end{shellcmd}
-\begin{shellcmd}
+\end{shellcode}
+\begin{shellcode}
 $> sed -n --in-place=bak -f script.sed sample.txt
-\end{shellcmd}
+\end{shellcode}
 注意一般长的选项前面加\shellinline{--}，而短的则加\shellinline{-}。
 
 另外一个常用的命令是删除\shellinline{d}。
-\begin{shellcmd}[label={sed:commandd}]
+\begin{shellcode}[label={sed:commandd}]
 $> sed '1d' sample.txt
 dog elephant frog
 hello world hello
@@ -298,37 +298,37 @@ The quick brown fox jumps over the lazy dog.
 HELLO WORLD!
 test@example.com
 line with   extra   spaces
-\end{shellcmd}
+\end{shellcode}
 \shellinline{1d}是作用是删除第一行。
 
 \section{其他几个标签}
 在\nameref{sec:normal}中介绍了\shellinline{g}、\shellinline{p}、\shellinline{n}(数字)标签，这里面我们来介绍
 \subsection{i/I标签-忽略大小写（case insensitive）}
 i标签的作用是搜索的时候不区分大小写。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed -n 's/hello/xxxxx/igp' sample.txt
 xxxxx world xxxxx
 xxxxx WORLD!
-\end{shellcmd}
+\end{shellcode}
 
 \subsection{w标签-写入文件}
 w标签使用时要注意，w之后的内容sed会全部认为是文件的名字，所以如果w标签之后还有其他操作，就需要用\shellinline{-e}或者将命令分行。
-\begin{shellcmd}[label={sub:labelw}]
+\begin{shellcode}[label={sub:labelw}]
 $> sed -n '/hello/Iw greetings.txt' sample.txt
-\end{shellcmd}
+\end{shellcode}
 另外，\shellinline{w}需要写在最后。示例\ref{sub:labelw}中不能使用\shellinline{i}来不区分大小写，因为在这里\shellinline{i}是插入命令。
 
 \subsection{e标签-执行shell命令}
-\begin{shellcmd}
+\begin{shellcode}
 $> echo "Today is:\ndate" | sed '/date/e'
 Today is:
 2025年11月22日 星期六 11时02分30秒 CST
-\end{shellcmd}
+\end{shellcode}
 结合\shellinline{expr}命令，还可以实现数学运算。
-\begin{shellcmd}[label={sub:labele}]
+\begin{shellcode}[label={sub:labele}]
 $> echo 3 | sed 's/./expr & "*" 4/e'
 12
-\end{shellcmd}
+\end{shellcode}
 注意\shellinline{*}号在shell中是通配符，所以需要用引号括起来表示是字符。示例\ref{sub:labele}中\shellinline{&}表示匹配到的内容。\shellinline{.}表示匹配任何内容，这个在正则表达式部分介绍。
 
 \subsection*{其他}
@@ -338,68 +338,68 @@ $> echo 3 | sed 's/./expr & "*" 4/e'
 sed的核心能力之一是通过\enquote{地址}（address）指定对这些行执行操作。其中，行号地址是最基础、最常用的地址形式。掌握行号地址的用法，是高效使用 sed 的关键。
 \subsection{单一行号}
 在示例\ref{sed:commandd}中我们已经见识过单个行号的用法。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed -n '3p' sample.txt #打印第3行
 
 hello world hello
-\end{shellcmd}
+\end{shellcode}
 \subsection{地址段}
-\begin{shellcmd}
+\begin{shellcode}
 $> seq 5 | sed '2,4d' #删除2到4行
 
 1
 5
-\end{shellcmd}
+\end{shellcode}
 \subsection{\$行号}
 \textdollar 表示最后一行。
-\begin{shellcmd}
+\begin{shellcode}
 $> seq 5 | sed '3,$d' #删除3到最后一行
 
 1
 2
-\end{shellcmd}
+\end{shellcode}
 
 \subsection{搜索结果}
-\begin{shellcmd}
+\begin{shellcode}
 $> seq 5 | sed '/3/d' #搜索包含3的行并删除
 
 1
 2
 4
 5
-\end{shellcmd}
+\end{shellcode}
 
 \subsection{搜索结果地址范围}
-\begin{shellcmd}
+\begin{shellcode}
 $> seq 5 | sed '/3/,/5/d' #搜索包含3的行与包含5的行及中间的行全部删除
 
 1
 2
-\end{shellcmd}
+\end{shellcode}
 如果\shellinline{sed '/hello/, /end/d'
 	sample.txt}中的end找不到，则会在找到hello后删除一直到最后一行结束，这个可能并不是我们想要的结果。只是受sed的设计原理所限，这是无法避免的。
-\begin{shellcmd}
+\begin{shellcode}
 $> sed '/hello/,/end/d' sample.txt
 apple banana cherry
 dog elephant frog
-\end{shellcmd}
+\end{shellcode}
 \subsection{行号与搜索结果混合}
-\begin{shellcmd}
+\begin{shellcode}
 $> sed '1,/hello/d' sample.txt
 123 456 789
 The quick brown fox jumps over the lazy dog.
 HELLO WORLD!
 test@example.com
 line with   extra   spaces
-\end{shellcmd}
+\end{shellcode}
 
 \subsection{地址加法}
-\begin{shellcmd}
+\begin{shellcode}
 $> sed '/dog/,+2d' sample.txt #找到包含dog的行，删除其与下面的两行
 
 apple banana cherry
 line with   extra   spaces
-\end{shellcmd}
+\end{shellcode}
 
 需要说明的是，sed是依次读取每一行到模式空间中，所以不可能实现地址的减法。如果地址范围超出只会到最后一行就自动结束。
 
@@ -462,14 +462,14 @@ BRE 的一个关键特点是：某些在 ERE 或现代正则中直接可用的�
 \noindent
 \twemoji{warning}\shellinline{\+}、\shellinline{\?} 并不是 POSIX BRE 的标准特性，但在 GNU 版本的 sed 和 grep 中被扩展支持。
 \textbf{示例（GNU sed）：}
-\begin{shellcmd}
+\begin{shellcode}
 $> echo "aaab" | sed -n '/a\{3\}b/p' # 匹配 "aaab"
 aaab
 $> echo "color colour" | sed 's/colou\?r/red/g' # 匹配 color 或 colour
 color colour
 $> echo "hello world" | sed 's/\(.\)\1/xx/' # 替换两个相同的字母为xx
 hexxo world
-\end{shellcmd}
+\end{shellcode}
 
 \subsubsection{BRE 与 ERE 的主要区别}
 
@@ -488,21 +488,21 @@ hexxo world
 \end{table}
 
 在 sed 中，若想使用 ERE，可加上 \shellinline{-E}（或 -r，取决于系统）选项：
-\begin{shellcmd}
+\begin{shellcode}
 $> sed -E 's/(foo)+/bar/g' # 使用 ERE
 
-\end{shellcmd}
+\end{shellcode}
 
 否则，默认使用 BRE。
 
 \subsubsection{实用技巧：在 sed 中使用 BRE}
 bash
-\begin{shellcmd}
+\begin{shellcode}
 $> sed 's/^[ \t]*//'  # 替换每行开头的空白
 
 $> sed '/^$/d'  # 删除空行：
 $> sed -n '/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/p'  # 提取 IP 地址的一部分（简化版）：
-\end{shellcmd}
+\end{shellcode}
 \subsubsection{小结}
 BRE 是 sed 的默认正则语法。
 它的元字符较少，且许多高级能需通过反斜杠转义启用。
